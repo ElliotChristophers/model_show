@@ -1,0 +1,132 @@
+#Each non-parameter line must have len(line) >= 7
+
+
+#Primitive simulation settings:
+
+with_true_kellys: #if true, will not look at what impact too high/low capital fraction has
+True
+
+distort_by_factor: #if with_true_kellys == False. if true, fraction is kelly * x; else, fixed bets related to initial_capital
+True
+
+random_probs_evs_kellys: #if with_true_kelly. if false, each bet will have a fixed kelly (thus also fixed EV, etc) and fixed probabilities (desired_prob_x). If true, both kelly and prob will be randomised for each individual bet. Thus, false can see which combinations of probabilities and kellys and evs are good, true is simply a random simulation
+True
+
+volatility_by_factor: #if True, volatility as multiplication; if False, as addition
+True
+
+percentiles: #if True, runs one simulation and shows relevant percentiles of external_simulations. the above Boolean conditions apply. For instance, if with_true_kellys == False and distort_by_factor == True, the simulation will use upper_distorter. The common principle is that the top parameter is always used.
+False
+
+threshold_analysis: #if True, will give three different simulations, each with a different ev threshold for accepting a bet
+False
+
+ev_by_uniform: #if threshold_analysis. if True, evs will be distributed uniformly, if False, distributed by custom gamma distribution
+False
+
+case: #cases are from which values to find others. 1=prob-ev, 2=prob-kelly, 3=ev-kelly
+1
+
+initial_capital:
+50
+
+number_external_simulations: #how many times the simulation is run, then averaging results. >= 30 for p-value
+50
+
+number_internal_simulations: #how many bets per simulation
+500
+
+volatility: #if volatility_by_factor == True, volatility is maximum factor of original probability by which the probability can vary, if volatility_by_factor == False, volatility is the fixed percentage by which each probabilty varies
+0
+
+bad_bet_proportion: 
+0
+
+resilience_factor: #if < 1, initial capital will be resilience_factor * initial_capital, however, line of comparison will be initial_capital. Demonstrates ability to rebound from bad start
+1
+
+view_percentile: #if percentiles, will show the view_percentile * 100 percentile, and (1 - view_percentile) * 100 percentile
+0.1
+
+percentile_range: #percentage either side for average, so view_percentile +- percentile_range
+0.05
+
+p1_factor: #Want to test how significant profit is, p-value of being greater than a certain profit level: X - mu = true profit - initial_capital * p_value_parameter_factor
+0
+
+p2_factor: #for whether observed capital is equal to expected. within a margin equal to p2_factor * initial_capital
+0.2
+
+
+
+#for all but with_true_kellys, not random_probs_and_kellys:
+
+min_random_prob:
+0.2
+max_random_prob:
+0.55
+
+min_random_ev:
+0.02
+max_random_ev:
+0.07
+
+min_random_bad_ev:
+0.01
+max_random_bad_ev:
+0.04
+
+min_random_kelly:
+0.03
+max_random_kelly:
+0.08
+
+min_random_bad_kelly: #if bad_bet_proportion > 0. Gives range of possible kellys to decrease probability. abs value, will be *(-1) for negative
+0
+max_random_bad_kelly:
+0.05
+
+
+
+#for not random_probs_and_kellys:
+
+desired_prob_1:
+0.75
+desired_prob_2:
+0.5
+desired_prob_3:
+0.25
+
+desired_ev: #desired_ev = prob * odds - 1
+0.025
+desired_bad_ev:
+0.025
+desired_kelly: #all three desired_probs must be greater than desired_kelly
+0.05
+
+
+
+#for not with_true_kellys:
+
+upper_distorter: #for distort_by_factor == True. Multiplies true kelly
+3
+lower_distorter: #for distort_by_factor == True. Multiplies true kelly
+0.2
+
+upper_distortion: #for distort_by_factor == False. bets fraction of initial capital, irrespective of current capital
+0.4
+lower_distortion: #for distort_by_factor == False. bets fraction of initial capital, irrespective of current capital
+0.02
+
+
+
+#for threshold_analysis:
+
+threshold_1:
+0.02
+
+threshold_2:
+0.04
+
+threshold_3:
+0.06
